@@ -1,4 +1,3 @@
-
 import argparse
 import json
 import os
@@ -64,6 +63,9 @@ class Test:
         print(f"OK Encryption ({self.t}): {r.cmd}")
         print(f"    {self.c} == {ct}")
 
+    def init(self):
+        self.write(self.ppath, self.p)
+
     @staticmethod
     def read(path):
         try:
@@ -100,9 +102,9 @@ if __name__ == "__main__":
             tests = json.load(fd)
             for test in tests:
                 t = Test(test, test_mode=args.T)
+                t.init()
                 t.encryption()
                 t.decryption()
-
         print("\nCongratulations. All tests passed!")
 
     except IOError as e:

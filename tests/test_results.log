@@ -1,0 +1,30 @@
+OK Encryption (t1): ./vigenere -E -k 'MYKEY' -i './tests/t1.pt' -o './tests/t1.ct'
+    YMZPYUB3IL5 == YMZPYUB3IL5
+OK Decryption (t1): ./vigenere -D -k 'MYKEY' -i './tests/t1.ct' -o './tests/t1.pt'
+    MYPLAINTEXT == MYPLAINTEXT
+OK Encryption (t2): ./vigenere -E -k 'THEQUICKBROWNFOXJUMPSOVERLAZYDOGS' -i './tests/t2.pt' -o './tests/t2.ct'
+    COI6EQEUC82I0K2KSEY4A2GI8WAOMG2MA == COI6EQEUC82I0K2KSEY4A2GI8WAOMG2MA
+OK Decryption (t2): ./vigenere -D -k 'THEQUICKBROWNFOXJUMPSOVERLAZYDOGS' -i './tests/t2.ct' -o './tests/t2.pt'
+    THEQUICKBROWNFOXJUMPSOVERLAZYDOGS == THEQUICKBROWNFOXJUMPSOVERLAZYDOGS
+OK Encryption (t3): ./vigenere -E -k 'UPUPUPUPUP' -i './tests/t3.pt' -o './tests/t3.ct'
+    E4E4E4E4E4 == E4E4E4E4E4
+OK Decryption (t3): ./vigenere -D -k 'UPUPUPUPUP' -i './tests/t3.ct' -o './tests/t3.pt'
+    UPUPUPUPUP == UPUPUPUPUP
+OK Encryption (t4): ./vigenere -E -k '143GIANTKEY598' -i './tests/t4.pt' -o './tests/t4.ct'
+    KCG4 == KCG4
+OK Decryption (t4): ./vigenere -D -k '143GIANTKEY598' -i './tests/t4.ct' -o './tests/t4.pt'
+    TINY == TINY
+OK Encryption (t5): ./vigenere -E -k 'SAMEOLD' -i './tests/t5.pt' -o './tests/t5.ct'
+    AAYI2WGAAYI2WG == AAYI2WGAAYI2WG
+OK Decryption (t5): ./vigenere -D -k 'SAMEOLD' -i './tests/t5.ct' -o './tests/t5.pt'
+    SAMEOLDSAMEOLD == SAMEOLDSAMEOLD
+OK Encryption (t6): ./vigenere -E -k 'HUMUHUMUNUKUNUKUAPUAA' -i './tests/t6.pt' -o './tests/t6.ct'
+    T8TUSUU4NGK2XUWUKP8KAWEM == T8TUSUU4NGK2XUWUKP8KAWEM
+OK Decryption (t6): ./vigenere -D -k 'HUMUHUMUNUKUNUKUAPUAA' -i './tests/t6.ct' -o './tests/t6.pt'
+    MOHALAIKAWAIKAMAKAOKAPUA == MOHALAIKAWAIKAMAKAOKAPUA
+OK Encryption (t7): ./vigenere -E -k 'REM' -i './tests/t7.pt' -o './tests/t7.ct'
+    ZEYDS32HXVEPVV18I5VRP == ZEYDS32HXVEPVV18I5VRP
+OK Decryption (t7): ./vigenere -D -k 'REM' -i './tests/t7.ct' -o './tests/t7.pt'
+    IAMWORLDLEADERPRETEND == IAMWORLDLEADERPRETEND
+
+Congratulations. All tests passed!

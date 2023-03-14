@@ -1,4 +1,6 @@
 
+/*Author: Jayven Cachola*/
+
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -63,7 +65,8 @@ int main(int argc, char **argv) {
     }
 
     //Get the size of the file
-    //This lets us dynamically allocate memory for the texts
+    //This lets us dynamically allocate memory for the text
+    //Searched up how to do this online
     fseek(input,0,SEEK_END);
     int inputSize = ftell(input);
     rewind(input);
@@ -95,14 +98,29 @@ int main(int argc, char **argv) {
     }
 
     char* inputText = (char*)malloc(sizeof(char) * (inputSize + 1));
-    char ch;
+    char ch = '{';
+
+    //Check if input file is empty
+    if(fgetc(input) == EOF) {
+
+            printf("Empty file detected\n");
+            return FAILED;
+    }
+    rewind(input);
+
+    //Initialize array that holds the contents of the input file
     int index = 0;
     while((ch = fgetc(input)) != EOF) {
+        //Check if the current character is a printable one
         if(!isprint(ch)){break;}
         inputText[index] = ch;
         index++;
     }
-    if(strlen(key) < strlen(inputText)) {
+
+    //Make a new key array if key is shorter than the input text
+    //Don't need to worry about longer key
+    int inputLength = strlen(inputText);
+    if(keyLength < inputLength) {
 
         char* newKey = (char*)malloc(sizeof(char) * (inputSize + 1));
         for(int i = 0; i < strlen(inputText); i++) {
@@ -111,29 +129,118 @@ int main(int argc, char **argv) {
         key = newKey;
     }
 
-    isEncrypt ? printf("...Encrypting now...\n") : printf("...Decrypting now...\n");
-    printf("Key: %s %ld\nPlaintext %s %ld\n",key,strlen(key),inputText,strlen(inputText));
-    fprintf(output,"%s +++ %s\n",key,inputText);
+    char* res = (char*)malloc(sizeof(char) * (inputSize + 1));
+
+    int success = isEncrypt ? encrypt(key,inputText,res) : decrypt(key,inputText,res);
+    if(success == FAILED){
+        printf("...Process Failed...\n");
+        return FAILED;
+    }
+    //Write result to output file
+    fprintf(output,"%s\n",res);
     fclose(input);
     fclose(output);
-    /* Your program should exit zero if all goes well otherwise 1 */
     return 0;
 }
 
 int decrypt(char *key, char *ciphertext, char *result) {
 
-    /* Add your code here */
+    //Check if something went wrong with memory
+    if(key == NULL || ciphertext == NULL || result == NULL){
+        printf("Decryption failed\n");
+        return FAILED;
+    }
+    printf("...Decrypting...\n");
+    int len = strlen(ciphertext);
+    int cipherNums[len];
+    int keyNums[len];
 
-    /* Your function should exit zero if all goes well otherwise 1 */
-    return 1;
+    //Convert the char arrays into int arrays
+    //so it is easier to make the alphabet
+    //shifts
+    for(int i = 0; i < len; i++) {
+
+        //Number values will hold values 26-35
+        //Letters will hold values 0-25
+        if(isdigit(ciphertext[i])) {
+            cipherNums[i] = ciphertext[i] - '0' + 26;
+        } else {
+            cipherNums[i] = ciphertext[i] - 'A';
+        }
+
+        if(isdigit(key[i])) {
+            keyNums[i] = key[i] - '0' + 26;
+        } else {
+            keyNums[i] = key[i] - 'A';
+        }
+    }
+
+    for(int i = 0; i < len; i++) {
+
+        //Mod by 36 since that's how long our alphabet is
+        int num = (cipherNums[i] - keyNums[i]) % 36;
+
+        //Shift values based on num
+        if(num < 0) {
+            num += 36;
+        }
+        if(num < 26) {
+            result[i] = num + 'A';
+        } else {
+            result[i] = num - 26 + '0';
+        }
+    }
+
+    return 0;
 }
 
 int encrypt(char *key, char *plaintext, char *result) {
 
-    /* Add your code here */
+    //Check if something went wrong with memory
+    if(key == NULL || plaintext == NULL || result == NULL){
+        printf("Encrypt failed\n");
+        return FAILED;
+    }
 
-    /* Your function should exit zero if all goes well otherwise 1 */
-    return 1;
+    printf("...Encrypting...\n");
+    int len = strlen(plaintext);
+    int plainNums[len];
+    int keyNums[len];
+
+    //Convert the char arrays into int arrays
+    //so it is easier to make the alphabet
+    //shifts
+    for(int i = 0; i < len; i++) {
+
+        //Number values will hold values 26-35
+        //Letters will hold values 0-25
+        if(isdigit(plaintext[i])) {
+            plainNums[i] = plaintext[i] - '0' + 26;
+        } else {
+            plainNums[i] = plaintext[i] - 'A';
+        }
+
+        if(isdigit(key[i])) {
+            keyNums[i] = key[i] - '0' + 26;
+        } else {
+            keyNums[i] = key[i] - 'A';
+        }
+    }
+
+    for(int i = 0; i < len; i++) {
+
+        //Mod by 36 since that's how long our alphabet is
+        int num = (plainNums[i] + keyNums[i]) % 36;
+
+        //Shift values based off num
+        if(num < 26) {
+            result[i] = num + 'A';
+        } else {
+            result[i] = num - 26 + '0';
+        }
+    }
+
+    return 0;
 }
 
 void show_usage() {
